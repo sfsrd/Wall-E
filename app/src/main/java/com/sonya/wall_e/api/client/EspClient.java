@@ -1,10 +1,12 @@
 package com.sonya.wall_e.api.client;
 
-import com.sonya.wall_e.api.request.MoveRequest;
+import android.view.View;
+
+import com.sonya.wall_e.async.task.MoveTask;
 
 public class EspClient  {
 
-    public void move(String direction) {
-        new MoveRequest().execute(direction);
+    public void move(View view, String direction) {
+        new MoveTask().execute(view, direction);
     }
 }
