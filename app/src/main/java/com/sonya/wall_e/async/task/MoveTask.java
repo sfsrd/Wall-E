@@ -15,28 +15,7 @@ public class MoveTask extends AsyncTask<Object, Object, Void> {
 
         final View view = (View) objects[0];
 
-        Runnable runnable = new Runnable() {
 
-            @Override
-            public void run() {
-
-                try {
-                    DataOutputStream dataOutputStream = SocketConnection.getOutputStream();
-
-                    while (view.isPressed()) {
-
-                        dataOutputStream.writeUTF(objects[1].toString());
-                        dataOutputStream.flush();
-
-                        Thread.sleep(200);
-                    }
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        runnable.run();
 
         return null;
     }

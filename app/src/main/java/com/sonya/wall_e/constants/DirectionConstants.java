@@ -1,11 +1,12 @@
 package com.sonya.wall_e.constants;
 
 public class DirectionConstants {
-    public static final String FORWARD = "forward";
 
-    public static final String BACKWARD = "backward";
+    public static final char FORWARD = 'f';
 
-    public static final String LEFT = "left";
+    public static final char BACKWARD = 'b';
 
-    public static final String RIGHT = "right";
+    public static final char LEFT = 'l';
+
+    public static final char RIGHT = 'r';
 }

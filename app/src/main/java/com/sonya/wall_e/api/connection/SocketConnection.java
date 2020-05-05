@@ -1,5 +1,7 @@
 package com.sonya.wall_e.api.connection;
 
+import com.sonya.wall_e.constants.EspServerConstants;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -19,11 +21,11 @@ public class SocketConnection {
 
         if (socket == null) {
 
-            socket = new Socket("192.168.4.1", 80);
+            socket = new Socket(EspServerConstants.IP_ADDRESS, EspServerConstants.PORT);
         } else {
             if (socket.isClosed()) {
 
-                socket = new Socket("192.168.4.1", 80);
+                socket = new Socket(EspServerConstants.IP_ADDRESS, EspServerConstants.PORT);
             }
         }
         return socket;
