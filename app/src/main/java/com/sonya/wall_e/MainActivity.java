@@ -5,7 +5,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sonya.wall_e.api.client.EspClient;
+import com.sonya.wall_e.rest.client.EspClient;
 import com.sonya.wall_e.constants.DirectionConstants;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.sonya.wall_e.api.connection;
+package com.sonya.wall_e.rest.connection;
 
 import com.sonya.wall_e.constants.EspServerConstants;
 
