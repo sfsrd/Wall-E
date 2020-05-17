@@ -3,6 +3,7 @@ package com.sonya.wall_e;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,8 +19,10 @@ import com.google.cloud.speech.v1.SpeechSettings;
 import com.google.cloud.speech.v1.StreamingRecognitionConfig;
 import com.google.cloud.speech.v1.StreamingRecognizeRequest;
 import com.google.cloud.speech.v1.StreamingRecognizeResponse;
-import com.sonya.wall_e.constants.DirectionConstants;
-import com.sonya.wall_e.rest.client.EspClient;
+import com.sonya.wall_e.async.task.ButtonMoveTask;
+import com.sonya.wall_e.async.task.SpeechMoveTask;
+import com.sonya.wall_e.constants.Direction;
+import com.sonya.wall_e.service.DirectionParser;
 import com.sonya.wall_e.speech.audio.AudioEmitter;
 import com.sonya.wall_e.speech.constants.SpeechConstants;
 
@@ -28,8 +31,6 @@ import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
-
-    private EspClient _espClient;
 
     private AudioEmitter _audioEmitter;
 
@@ -44,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        _espClient = new EspClient();
-
         speech = findViewById(R.id.textView);
+
+        speech.setMovementMethod(new ScrollingMovementMethod());
 
         try {
             SpeechConstants.PERMISSIONS.add(Manifest.permission.RECORD_AUDIO);
@@ -75,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
             AtomicBoolean isFirstRequest = new AtomicBoolean(true);
 
-            _audioEmitter = new AudioEmitter();
-
             ApiStreamObserver requestStream = _speechClient.streamingRecognizeCallable()
                     .bidiStreamingCall(new ApiStreamObserver<StreamingRecognizeResponse>() {
 
@@ -87,9 +86,17 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (value.getResultsCount() > 0) {
 
-                                    speech.setText(value.getResults(0).getAlternatives(0).getTranscript());
-                                } else {
+                                    String transcript = value.getResults(0).getAlternatives(0).getTranscript();
 
+                                    speech.setText(transcript);
+
+                                    Direction direction = DirectionParser.parseDirection(transcript);
+
+                                    DirectionParser.setGlobalDirection(direction);
+
+                                    new SpeechMoveTask().execute();
+
+                                } else {
                                     speech.setText("Error");
                                 }
                             });
@@ -137,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         _audioEmitter.stop();
-        _audioEmitter = null;
     }
 
     @Override
@@ -161,18 +167,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void moveForward(View view) {
-        _espClient.move(view, DirectionConstants.FORWARD);
+
+        new ButtonMoveTask().execute(view, Direction.FORWARD);
     }
 
     public void moveBackward(View view) {
-        _espClient.move(view, DirectionConstants.BACKWARD);
+
+        new ButtonMoveTask().execute(view, Direction.BACKWARD);
     }
 
     public void moveLeft(View view) {
-        _espClient.move(view, DirectionConstants.LEFT);
+
+        new ButtonMoveTask().execute(view, Direction.LEFT);
     }
 
     public void moveRight(View view) {
-        _espClient.move(view, DirectionConstants.RIGHT);
+
+        new ButtonMoveTask().execute(view, Direction.RIGHT);
     }
 }
