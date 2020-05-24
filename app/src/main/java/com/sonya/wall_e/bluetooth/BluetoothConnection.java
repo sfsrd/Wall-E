@@ -74,10 +74,7 @@ public class BluetoothConnection {
                 }
             }
         }
-        return null;
-    }
 
-    public static void setDeviceName(String deviceName) {
-        _deviceName = deviceName;
+        return null;
     }
 }

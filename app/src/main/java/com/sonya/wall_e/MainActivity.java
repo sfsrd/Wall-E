@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
                                     String transcript = value.getResults(0).getAlternatives(0).getTranscript();
 
+                                    transcript = transcript.replaceAll("\\s+", "");
+
                                     speech.setText(transcript);
 
                                     Direction direction = DirectionParser.parseDirection(transcript);
